@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retail Sales Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #e0e0e0;
+      padding: 10px;
+    }
+    nav button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: 500;
+    }
+    nav button:hover {
+      background-color: #005a9e;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    .kpi-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    .kpi-box {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      text-align: center;
+      width: 25%;
+    }
+    .chart-container {
+      width: 90%;
+      margin: auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>Retail Sales Dashboard</header>
+
+  <nav>
+    <button onclick="showTab('overview')">Overview</button>
+    <button onclick="showTab('monthlySales')">Monthly Sales</button>
+    <button onclick="showTab('categoryShare')">Category Share</button>
+    <button onclick="showTab('growthTrend')">Revenue Growth</button>
+  </nav>
+
+  <!-- Overview Tab -->
+  <div id="overview" class="tab-content active">
+    <div class="kpi-container">
+      <div class="kpi-box">
+        <h3>Total Revenue</h3>
+        <p style="font-size:22px; color:#0078d4;">₹1,47,600</p>
+      </div>
+      <div class="kpi-box">
+        <h3>Top Region</h3>
+        <p style="font-size:22px; color:#0078d4;">North</p>
+      </div>
+      <div class="kpi-box">
+        <h3>Profit Margin</h3>
+        <p style="font-size:22px; color:#0078d4;">20%</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Sales Tab -->
+  <div id="monthlySales" class="tab-content">
+    <div class="chart-container">
+      <h3 style="text-align:center;">Monthly Sales Performance</h3>
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Category Share Tab -->
+  <div id="categoryShare" class="tab-content">
+    <div class="chart-container">
+      <h3 style="text-align:center;">Product Category Share</h3>
+      <canvas id="categoryChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Revenue Growth Tab -->
+  <div id="growthTrend" class="tab-content">
+    <div class="chart-container">
+      <h3 style="text-align:center;">Revenue Growth Trend</h3>
+      <canvas id="growthChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Monthly Sales Chart
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Total Sales (₹)',
+          data: [17300,12600,8300,14500,16800,12300,19500,15200,9800,13400,18000,11000],
+          backgroundColor: ['#003366','#0078d4','#c2dfff','#003366','#0078d4','#c2dfff','#003366','#0078d4','#c2dfff','#003366','#0078d4','#c2dfff']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Category Share Chart
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Electronics','Clothing','Furniture','Grocery'],
+        datasets: [{
+          data: [30,25,25,20],
+          backgroundColor: ['#003366','#0078d4','#c2dfff','#a8d5ba']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    // Revenue Growth Chart
+    const growthCtx = document.getElementById('growthChart').getContext('2d');
+    new Chart(growthCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Revenue Growth (₹)',
+          data: [17000,12000,8500,15000,18500,21000,16000,10500,14000,19000,13000,19000],
+          borderColor: '#0078d4',
+          backgroundColor: '#0078d4',
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
